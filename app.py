@@ -7,7 +7,7 @@ from sqlalchemy import create_engine, func
 import requests as req
 import json
 from census_funcs import get_community_data 
-from nathan_functions import barfinder
+from POI_functions import barfinder
 from miriam_functions import get_real_estate_data, compute_score
 
 app = Flask(__name__)
