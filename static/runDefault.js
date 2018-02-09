@@ -185,18 +185,17 @@ function checkZipDef(code, zipData) {
 
 // create global map variable
 var myMap;
-function zipMapDef(lat, lng, z_info){
+function zipMapDef(lat, lng, z_info, score){
 
     // create the initial map
     myMap = L.map('map').setView([lat, lng], 13);
 
     L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/outdoors-v10/tiles/256/{z}/{x}/{y}?" +
     "access_token=pk.eyJ1IjoiYmxhc2VyMjIiLCJhIjoiY2pjc2F3NXBmMHBzNjJxbnE2MjkzZWhmOCJ9.PGCeud8Kd0hTJ4Eh-w6nFg").addTo(myMap);
-
+    var final_score = Math.round(score*100) 
     var marker = L.marker([lat, lng], {
         draggable: true
-    }).bindPopup("Zip Code: " + z_info.zip + "<hr> City: " + z_info.city + "<br> County: " +
-    z_info.county + "<br>State: " + z_info.state).addTo(myMap);
+    }).bindPopup("Zip Code: " + z_info.zip + "<hr> City: " + z_info.city + "<br> County: " + z_info.county + "<br>State: " + z_info.state + "<br> Score: " + final_score).addTo(myMap);
 };
 
 
@@ -303,7 +302,7 @@ function age_pieDef(data, zip, lat, lng, zip_info){
 
         // plot the chart
         Plotly.newPlot('age-pie', piedata, layout);
-        zipMapDef(lat,lng, zip_info)
+        zipMapDef(lat,lng, zip_info, data.score)
 };
 
 var originalWidth = document.getElementById('cont1').clientWidth;

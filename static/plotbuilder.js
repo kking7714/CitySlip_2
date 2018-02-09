@@ -62,15 +62,15 @@ function checkzip(code) {
 
 })};
 
-function zipMap(lat, lng, z_info){
+function zipMap(lat, lng, z_info, score){
 
   // change the map view to the new zip code
   myMap.panTo(new L.LatLng(lat, lng));
-
+  var final_score = Math.round(score * 100)
   // add marker for new zipcode
   var marker = L.marker([lat, lng], {
       draggable: true
-  }).bindPopup("Zip Code: " + z_info.zip + "<hr> City: " + z_info.city + "<br> County: " + z_info.county + "<br>State: " + z_info.state).addTo(myMap);
+  }).bindPopup("Zip Code: " + z_info.zip + "<hr> City: " + z_info.city + "<br> County: " + z_info.county + "<br>State: " + z_info.state + "<br> Score: " + final_score).addTo(myMap);
 
 };
 
@@ -189,7 +189,7 @@ function age_pie(data, zip, lat, lng, zip_info){
         Plotly.restyle('age-pie', "labels", [pie_labels]);
         Plotly.restyle('age-pie', "hovertext", [age_desc]);
         Plotly.relayout('age-pie', "title", new_title_age);
-        zipMap(lat,lng, zip_info)
+        zipMap(lat,lng, zip_info, data.score)
 };
 
 var originalWidth = document.getElementById('cont1').clientWidth;
