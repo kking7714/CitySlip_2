@@ -405,7 +405,29 @@ def compute_score(zip_factors, poi_data, census_dict, REdata, re_dict):
         crime_risk = zip_factors['crime'],
         score = score)
 
-    session.add(score_data)
-    session.commit()
+    def check_score(city_check, score):
+        zip_check = []
+        for city in city_check:
+            if city[17] == score:
+                zip_check.append('True')
+            else:
+                zip_check.append('False')
+        return zip_check
+    #format SQL select statement with zip_code
+    city_sql = "SELECT * FROM city_slip WHERE zip_code == %s" % zip_code
+    city_check = engine.execute(city_sql).fetchall()
+    if len(city_check) == 0:
+        #if the zipcode has not been logged then insert in to database
+        print("New zipcode data, record inserted in database")
+        session.add(score_data)
+        session.commit()
+    elif 'True' in check_score(city_check, score):
+        #check to see if the zipcode exists in the DB, if it does verify whether score is the same.
+        print("Record exists in database, bypassing import")
+    else:
+        #if the zipcode exists in the DB, but not with same score, then insert record
+        print("New data acquired on zipcode in database, inserting record")
+        session.add(score_data)
+        session.commit()
 
     return score
