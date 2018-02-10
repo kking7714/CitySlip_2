@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
 import requests as req
 import json
-from census_funcs import get_community_data 
+from census_funcs import get_community_data, cityslip_history
 from POI_functions import barfinder
 from RE_functions import get_real_estate_data, compute_score
 
@@ -163,7 +163,9 @@ def get_alldata(zip):
 
     #return render_template("index.html")
 
-
+@app.route("/history")
+def get_history():
+    return (jsonify(cityslip_history()))
 
 
 if __name__ == "__main__":

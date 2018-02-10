@@ -12,7 +12,12 @@ import csv
 import os
 from RE_functions import get_real_estate_data
 
-
+import sqlalchemy
+from sqlalchemy.ext.automap import automap_base
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import Session
+from sqlalchemy import create_engine, func
+from sqlalchemy import Column, Integer, String, Float, Text
 
 
 ###------------------------------------------###
@@ -393,4 +398,43 @@ def get_community_data(zip, census, zip_latlon, Market_Health, Home_sales, Renta
     #Community dict used for FLASK app to jsonify
     return [community_dict, poi_data, census_dict, REdata, re_dict]
 ### END GET COMMUNITY DATA FUNCTION
+###------------------------------------------###
+###------------------------------------------###
+### START GET CITY SLIP HISTORY DATA FUNCTION
+#Mirrors the city_slip sqlite database and presents all records stored
+def cityslip_history():
+    Base = declarative_base()
+    engine = create_engine("sqlite:///city_slip.sqlite")
+    session = Session(engine)
+    city_query = engine.execute("SELECT * FROM city_slip").fetchall()
+    print(city_query)
+    citySlip_records = []
+    for c in city_query:
+        record_dict = {}
+        record_dict['00_record'] = c[0]
+        record_dict['01_zip_code'] = c[1]
+        record_dict['02_city'] = c[2]
+        record_dict['03_state'] = c[3]
+        record_dict['04_county'] = c[4]
+        record_dict['05_score_date'] = c[5]
+        record_dict['06_avg_home_value'] = c[6]
+        record_dict['07_avg_rent'] = c[7]
+        record_dict['08_re_market_health'] = round(c[8])
+        record_dict['09_avg_winter_temp'] = c[9]
+        record_dict['10_avg_summer_temp'] = c[10]
+        record_dict['11_total_schools'] = c[11]
+        record_dict['12_total_pois'] = c[12]
+        record_dict['13_pop_growth'] = c[13]
+        record_dict['14_sales_tax_rate'] = c[14]
+        record_dict['15_walkability'] = c[15]
+        record_dict['16_crime_risk'] = c[16]
+        if c[17] < 1:
+            record_dict['17_score'] = round(c[17] * 100)
+        else:
+            record_dict['17_score'] = round(c[17])
+        citySlip_records.append(record_dict)
+
+    return citySlip_records
+        
+### END GET CITY SLIP HISTORY DATA FUNCTION
 ###------------------------------------------###
