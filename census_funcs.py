@@ -287,7 +287,7 @@ def barfinder(zip, zip_latlon, session):
                     gkey)
 
             places_data = req.get(target_url).json()
-
+            
             # use the len function to find the count of results
             numbers = len(places_data["results"])
 
@@ -301,6 +301,19 @@ def barfinder(zip, zip_latlon, session):
                 count += 1
 
     # return the results
+    if "Liquorstore" not in poi_results:
+        poi_results["Liquorstore"] = 0
+    if "Gym" not in poi_results:
+        poi_reuslts["Gym"] = 0
+    if "Park" not in poi_results:
+        poi_results["Park"] = 0
+    if "Shoppingmall" not in poi_results:
+        poi_results["Shoppingmall"] = 0
+    if "Groceryorsupermarket" not in poi_results:
+        poi_results["Groceryorsupermarket"] = 0
+    if "Movietheater" not in poi_results:
+        poi_results["Movietheater"] = 0
+    print(poi_results)
     return poi_results
 
 ### END GET POIs
